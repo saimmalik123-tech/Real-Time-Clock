@@ -48,7 +48,16 @@ function updateDate() {
   ];
   const month = months[now.getMonth()];
   const year = now.getFullYear();
-  dateEle.textContent = `${day} ${month} ${year}`;
+
+  if (day === 14 && month === "Aug") {
+    dateEle.textContent = `🎉 Pakistan Independence Day 🇵🇰`;
+    body.style.background = "linear-gradient(145deg, #01411C, #FFFFFF)";
+    body.style.color = "#FFFFFF";
+  } else {
+    dateEle.textContent = `${day} ${month} ${year}`;
+    body.classList.toggle("dark", toggleInput.checked);
+    body.classList.toggle("light", !toggleInput.checked);
+  }
 }
 
 function updateAll() {
@@ -58,8 +67,10 @@ function updateAll() {
 }
 
 toggleInput.addEventListener("change", () => {
-  body.classList.toggle("dark", toggleInput.checked);
-  body.classList.toggle("light", !toggleInput.checked);
+  if (!(new Date().getDate() === 14 && new Date().getMonth() === 7)) {
+    body.classList.toggle("dark", toggleInput.checked);
+    body.classList.toggle("light", !toggleInput.checked);
+  }
 });
 
 setInterval(updateAll, 1000);
