@@ -3,6 +3,8 @@ const dayEle = document.querySelector("#day");
 const dateEle = document.querySelector("#date");
 const toggleInput = document.querySelector("#toggleMode");
 const body = document.body;
+const modal = document.querySelector(".modal");
+const closeModal = document.querySelector("#closeModal");
 
 function updateTime() {
   const now = new Date();
@@ -48,16 +50,7 @@ function updateDate() {
   ];
   const month = months[now.getMonth()];
   const year = now.getFullYear();
-
-  if (day === 14 && month === "Aug") {
-    dateEle.textContent = `🎉 Pakistan Independence Day 🇵🇰`;
-    body.style.background = "linear-gradient(145deg, #01411C, #FFFFFF)";
-    body.style.color = "#FFFFFF";
-  } else {
-    dateEle.textContent = `${day} ${month} ${year}`;
-    body.classList.toggle("dark", toggleInput.checked);
-    body.classList.toggle("light", !toggleInput.checked);
-  }
+  dateEle.textContent = `${day} ${month} ${year}`;
 }
 
 function updateAll() {
@@ -67,11 +60,34 @@ function updateAll() {
 }
 
 toggleInput.addEventListener("change", () => {
-  if (!(new Date().getDate() === 14 && new Date().getMonth() === 7)) {
-    body.classList.toggle("dark", toggleInput.checked);
-    body.classList.toggle("light", !toggleInput.checked);
-  }
+  body.classList.toggle("dark", toggleInput.checked);
+  body.classList.toggle("light", !toggleInput.checked);
 });
 
+closeModal.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+function createConfetti() {
+  for (let i = 0; i < 100; i++) {
+    const confetti = document.createElement("div");
+    confetti.classList.add("confetti");
+    confetti.style.left = Math.random() * window.innerWidth + "px";
+    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+    confetti.style.animationDuration = 2 + Math.random() * 3 + "s";
+    document.body.appendChild(confetti);
+    setTimeout(() => confetti.remove(), 5000);
+  }
+}
+
+function checkPakistanDay() {
+  const now = new Date();
+  if (now.getDate() === 14 && now.getMonth() === 7) {
+    createConfetti();
+    modal.style.display = "flex";
+  }
+}
+
 setInterval(updateAll, 1000);
+setInterval(checkPakistanDay, 1000);
 updateAll();
