@@ -1,11 +1,14 @@
 const clockEle = document.querySelector("#clock");
 const dayEle = document.querySelector("#day");
 const dateEle = document.querySelector("#date");
-const toggleInput = document.querySelector("#toggleMode");
+
+const toggleCheckbox = document.querySelector(".theme-switch__checkbox");
 const body = document.body;
+
 const modal = document.querySelector(".modal");
 const closeModal = document.querySelector("#closeModal");
 
+// ---- Clock ----
 function updateTime() {
   const now = new Date();
   let hours = now.getHours();
@@ -18,36 +21,14 @@ function updateTime() {
 }
 
 function updateDay() {
-  const now = new Date();
-  const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-  dayEle.textContent = days[now.getDay()];
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  dayEle.textContent = days[new Date().getDay()];
 }
 
 function updateDate() {
   const now = new Date();
   const day = now.getDate();
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const month = months[now.getMonth()];
   const year = now.getFullYear();
   dateEle.textContent = `${day} ${month} ${year}`;
@@ -58,36 +39,61 @@ function updateAll() {
   updateDay();
   updateDate();
 }
-
-toggleInput.addEventListener("change", () => {
-  body.classList.toggle("dark", toggleInput.checked);
-  body.classList.toggle("light", !toggleInput.checked);
-});
-
-closeModal.addEventListener("click", () => {
-  modal.style.display = "none";
-});
-
-function createConfetti() {
-  for (let i = 0; i < 100; i++) {
-    const confetti = document.createElement("div");
-    confetti.classList.add("confetti");
-    confetti.style.left = Math.random() * window.innerWidth + "px";
-    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-    confetti.style.animationDuration = 2 + Math.random() * 3 + "s";
-    document.body.appendChild(confetti);
-    setTimeout(() => confetti.remove(), 5000);
-  }
-}
-
-function checkPakistanDay() {
-  const now = new Date();
-  if (now.getDate() === 14 && now.getMonth() === 7) {
-    createConfetti();
-    modal.style.display = "flex";
-  }
-}
-
 setInterval(updateAll, 1000);
-setInterval(checkPakistanDay, 1000);
 updateAll();
+
+// ---- Theme toggle ----
+function applyTheme(isDark) {
+  body.classList.toggle("dark", isDark);
+  body.classList.toggle("light", !isDark);
+  if (toggleCheckbox) toggleCheckbox.checked = isDark;
+  try { localStorage.setItem("theme", isDark ? "dark" : "light"); } catch { }
+}
+
+try {
+  const saved = localStorage.getItem("theme");
+  if (saved === "dark") applyTheme(true);
+} catch { }
+
+if (toggleCheckbox) {
+  toggleCheckbox.addEventListener("change", (e) => {
+    applyTheme(e.target.checked);
+  });
+}
+
+// ---- Modal Independence Day (only on 14 Aug) ----
+function launchConfetti() {
+  const duration = 3 * 1000; // 3 seconds
+  const end = Date.now() + duration;
+
+  (function frame() {
+    confetti({
+      particleCount: 4,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 }
+    });
+    confetti({
+      particleCount: 4,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 }
+    });
+
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  })();
+}
+
+const now = new Date();
+if (now.getDate() === 14 && now.getMonth() === 7) { // August = 7
+  modal.style.display = "flex";
+  launchConfetti();
+}
+
+if (closeModal) {
+  closeModal.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+}

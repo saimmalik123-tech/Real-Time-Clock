@@ -1,33 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Digital Clock - Pakistan Independence Day</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body class="light">
-    <div class="clock-container">
-      <div id="clock" class="clock">00:00:00 AM</div>
-      <div id="day" class="day">Day</div>
-      <div id="date" class="date">Date</div>
 
-      <div class="toggle-wrapper">
-        <label class="switch">
-          <input type="checkbox" id="toggleMode" />
-          <span class="slider"></span>
-        </label>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Clock - Pakistan Independence Day</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="light">
+  <div class="clock-container">
+    <div id="clock" class="clock">00:00:00 AM</div>
+    <div id="day" class="day">Day</div>
+    <div id="date" class="date">Date</div>
+
+    <div class="toggle-wrapper">
+      <label class="theme-switch">
+        <input type="checkbox" id="themeToggle" class="theme-switch__checkbox" />
+        <div class="theme-switch__container">
+          <div class="theme-switch__clouds"></div>
+          <div class="theme-switch__stars-container">
+            <!-- (Stars SVG left as before) -->
+          </div>
+          <div class="theme-switch__circle-container">
+            <div class="theme-switch__sun-moon-container">
+              <div class="theme-switch__moon">
+                <div class="theme-switch__spot"></div>
+                <div class="theme-switch__spot"></div>
+                <div class="theme-switch__spot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </label>
     </div>
+  </div>
 
-    <div class="modal">
-      <div class="modal-content">
-        <h2>Pakistan Independence Day!</h2>
-        <p>14 August</p>
-        <button id="closeModal">Close</button>
-      </div>
+  <!-- 🎉 Modal -->
+  <div class="modal">
+    <div class="modal-content">
+      <h2>Pakistan Independence Day!</h2>
+      <p>14 August</p>
+      <button id="closeModal">Close</button>
     </div>
+  </div>
 
-    <script src="script.js"></script>
-  </body>
+  <!-- 🧨 Confetti JS -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
 </html>
